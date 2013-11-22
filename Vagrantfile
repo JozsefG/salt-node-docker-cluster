@@ -58,6 +58,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision :shell, :inline=> "sudo apt-get update"
       config.vm.provision :shell, :inline=> "sudo apt-get -y install salt-minion lxc-docker git python-pip"
 
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/salt/minion"
+
       config.vm.provision :shell, :inline=> "git clone https://github.com/dotcloud/docker-py.git"
       config.vm.provision :shell, :inline=> "cd docker-py; sudo python setup.py install"
 
@@ -70,6 +72,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision :shell, :inline=> "sudo cp /vagrant/supervisor-salt.conf /etc/docker/nodebuntu"
 
       config.vm.provision :shell, :inline=> "sudo docker build -t nodebuntu /etc/docker/nodebuntu/"
+
+      config.vm.provision :shell, :inline=> "sudo reboot"
     end
   end
 end
