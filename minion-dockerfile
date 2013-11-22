@@ -1,0 +1,26 @@
+FROM ubuntu:latest
+
+RUN apt-get -y install python-software-properties wget
+
+
+RUN add-apt-repository ppa:saltstack/salt
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get update
+
+RUN apt-get -y install sudo supervisor
+
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -s /bin/true /sbin/initctl
+
+RUN wget http://nodejs.org/dist/v0.10.22/node-v0.10.22-linux-x64.tar.gz
+RUN tar zxvf node-v0.10.22-linux-x64.tar.gz
+RUN mv node-v0.10.22-linux-x64 /opt/node
+
+RUN ln -s /opt/node/bin/node /bin/node
+RUN ln -s /opt/node/bin/npm /bin/npm
+
+RUN npm install -g coffee-script bower express
+
+ADD ./supervisor-salt.conf /etc/supervisor/conf.d/
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
