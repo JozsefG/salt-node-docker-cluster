@@ -62,46 +62,85 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     $ sudo salt-key -A
     $ sudo salt-key -L 
     
-## Make demands to our node minion
+## Verify our node container minion is online
+
+##### Description
+    We will use the active module and state scripts for dockerio in this project.
+    Included in the srv folder are _modules and _states subfolders with the dockerio
+    py files.
+    
+##### Cmds
+    
+    $ vagrant ssh salt
+    $ sudo salt 'minion-*' docker.get_containers all=false
+ 
+##### Output:
+    minion-01:
+        ----------
+        comment:
+            All containers in out
+        id:
+            None
+        out:
+            ----------
+            - Command:
+                /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+            - Created:
+                1385235040
+            - Id:
+                f99a4e4730d6ef9d00f5369aa11af386b8fc7d538faea196953815684ca1a551
+            - Image:
+                nodebuntu:latest
+            - Names:
+                - /node
+            - Ports:
+                ----------
+                - IP:
+                    0.0.0.0
+                - PrivatePort:
+                    3000
+                - PublicPort:
+                    49155
+                - Type:
+                    tcp
+            - SizeRootFs:
+                0
+            - SizeRw:
+                0
+            - Status:
+                Up 3 hours
+        status:
+            True
+    minion-02:
+        ----------
+        comment:
+            We did not get any expectable answer from docker
+        id:
+            None
+        out:
+            None
+        status:
+            False
+    minion-03:
+        ----------
+        comment:
+            We did not get any expectable answer from docker
+        id:
+            None
+        out:
+            None
+        status:
+            False 
+    
+## Make demands to our node container minion
 
 #### Description
 
     For a quick example of states, we'll double check nodejs (and deps)
     installed into the container during our docker image build.
     
-    While still ssh'ed into salt create the following files described below.
-    Then, run the commands in the Cmds section.
-    
-##### /srv/salt/top.sls
-
-```python
-base:
-  '*':
-    - nodejs.deps
-    - python.deps
-```
-
-##### /srv/salt/python/deps.sls
-
-```python
-python:
-  pkg:
-    - installed
-```
-
-##### /srv/salt/nodejs/deps.sls
-
-```python
-coffee:
-  npm.installed:
-    - name: coffee-script
-
-bower:
-  npm.installed
-
-express:
-  npm.installed
-```
+    This project includes a srv folder that is copied to /srv on the master.
+    Please see these files for config details.
 
 ##### Cmds
 
