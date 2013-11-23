@@ -26,6 +26,12 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 
 ## Installation and Running the cluster
 
+##### Description
+
+    This cluster runs on a private vbox network on the 192.168.200 subnet.
+    Salt server runs on 192.168.200.5 and the minions are 192.168.200.[6,7,8].
+    
+##### Cmds   
     $ git clone https://github.com/PortalGNU/salt-node-docker-cluster.git
     $ cd salt-node-docker-cluster
     $ vagrant up
@@ -33,10 +39,20 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
 ## Spawning minions to do your bidding
 
-#### Start a salted container
+##### Start a salted lamp container
+
+    Here we are logging into one of our minion docker servers and spawning
+    a minion docker container for a salted lamp stack.  We are assigning
+    the docker a useful name (lamp) so that we can filter it out in our 
+    salt-master state configs.
+    
+    Note:  In order for memory allocation to actually happen, there must
+    be swap space allocated on the minion server.  
+
+##### Cmds
 
     $ vagrant ssh minion-[01, 02, 03]
-    $ sudo docker run -d nodebuntu
+    $ sudo docker run -d -name node -h node -m 279969792 -v /vagrant:/vagrant -p 3000 nodebuntu
     $ exit
     
 
@@ -46,4 +62,85 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     $ sudo salt-key -A
     $ sudo salt-key -L 
     
+## Make demands to our node minion
 
+#### Description
+
+    For a quick example of states, we'll double check nodejs (and deps)
+    installed into the container during our docker image build.
+    
+    While still ssh'ed into salt create the following files described below.
+    Then, run the commands in the Cmds section.
+    
+##### /srv/salt/top.sls
+
+```python
+base:
+  '*':
+    - nodejs.deps
+    - python.deps
+```
+
+##### /srv/salt/python/deps.sls
+
+```python
+python:
+  pkg:
+    - installed
+```
+
+##### /srv/salt/nodejs/deps.sls
+
+```python
+coffee:
+  npm.installed:
+    - name: coffee-script
+
+bower:
+  npm.installed
+
+express:
+  npm.installed
+```
+
+##### Cmds
+
+    $  sudo salt 'node' state.highstate
+    
+
+    node:
+    ----------
+        State: - npm
+        Name:      coffee-script
+        Function:  installed
+            Result:    True
+            Comment:   Package coffee-script satisfied by coffee-script@1.6.3
+            Changes:   
+    ----------
+        State: - npm
+        Name:      bower
+        Function:  installed
+            Result:    True
+            Comment:   Package bower satisfied by bower@1.2.7
+            Changes:   
+    ----------
+        State: - npm
+        Name:      express
+        Function:  installed
+            Result:    True
+            Comment:   Package express satisfied by express@3.4.4
+            Changes:   
+    ----------
+        State: - pkg
+        Name:      python
+        Function:  installed
+            Result:    True
+            Comment:   Package python is already installed
+            Changes:   
+    
+    Summary
+    ------------
+    Succeeded: 4
+    Failed:    0
+    ------------
+    Total:     4
