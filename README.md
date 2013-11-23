@@ -37,6 +37,67 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     $ vagrant up
     $ vagrant ssh [salt, minion-01, minion-02, minion-03] 
     
+## Verify docker server minions have pre-built salted node image "nodebuntu"
+
+#### Description
+    
+    With the dockerio state, we will verify that the docker image "nodebuntu" is 
+    built and ready to use.
+    
+#### Cmds
+
+    $ sudo salt 'minion-*' state.highstate
+    
+#### Output
+    minion-01:
+    ----------
+        State: - docker
+        Name:      nodebuntu
+        Function:  built
+            Result:    True
+            Comment:   Image already built: nodebuntu, id: 27ca229ad947061aeda63f2f25622f3af9dd63c2d0e70ac43e6c73a61e2d8cac
+            Changes:   
+    
+    Summary
+    ------------
+    Succeeded: 5
+    Failed:    0
+    ------------
+    Total:     5
+    
+    minion-03:
+    ----------
+        State: - docker
+        Name:      nodebuntu
+        Function:  built
+            Result:    True
+            Comment:   Image already built: nodebuntu, id: 27ca229ad947061aeda63f2f25622f3af9dd63c2d0e70ac43e6c73a61e2d8cac
+            Changes:   
+    
+    Summary
+    ------------
+    Succeeded: 5
+    Failed:    0
+    ------------
+    Total:     5
+    
+    minion-02:
+    ----------
+        State: - docker
+        Name:      nodebuntu
+        Function:  built
+            Result:    True
+            Comment:   Image already built: nodebuntu, id: 27ca229ad947061aeda63f2f25622f3af9dd63c2d0e70ac43e6c73a61e2d8cac
+            Changes:   
+    
+    Summary
+    ------------
+    Succeeded: 5
+    Failed:    0
+    ------------
+    Total:     5
+
+    
 ## Spawning minions to do your bidding
 
 ##### Start a salted node container
