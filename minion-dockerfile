@@ -7,7 +7,7 @@ RUN add-apt-repository ppa:saltstack/salt
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 
-RUN apt-get -y install sudo supervisor
+RUN apt-get -y install sudo supervisor salt-minion
 
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -s /bin/true /sbin/initctl
