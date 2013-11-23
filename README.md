@@ -42,8 +42,8 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 ##### Start a salted node container
 
     Here we are logging into one of our minion docker servers and spawning
-    a minion docker container for a salted lamp stack.  We are assigning
-    the docker a useful name (lamp) so that we can filter it out in our 
+    a minion docker container for a salted node env.  We are assigning
+    the docker a useful name (node) so that we can filter it out in our 
     salt-master state configs.
     
     Note:  In order for memory allocation to actually happen, there must
