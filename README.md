@@ -39,7 +39,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
 ## Spawning minions to do your bidding
 
-##### Start a salted lamp container
+##### Start a salted node container
 
     Here we are logging into one of our minion docker servers and spawning
     a minion docker container for a salted lamp stack.  We are assigning
