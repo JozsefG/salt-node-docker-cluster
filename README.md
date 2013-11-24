@@ -157,10 +157,9 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     Please see these files for config details.
     
     Also note, /srv/salt/node/src is synced by salt master 
-    for this demonstration, so create the src folder and 
-    put an app.js that runs on port 3000 or takes PORT from env.
+    for this demonstration.
     
-    We are essentially telling salt-master to inject the node minion
+    We are essentially telling salt-master to inject the 'node' minion
     running in a docker container on minion-01 with a nodejs httpd 
     based webapp that runs on port 3000.  Once the highstate is complete,
     the container must be restarted for supervisord to pick up the new config.
