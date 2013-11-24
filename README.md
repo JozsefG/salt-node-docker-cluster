@@ -210,6 +210,41 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 
     node:
     ----------
+        State: - pkg
+        Name:      supervisor
+        Function:  installed
+            Result:    True
+            Comment:   Package supervisor is already installed
+            Changes:   
+    ----------
+        State: - service
+        Name:      supervisor
+        Function:  running
+            Result:    True
+            Comment:   The service supervisor is already running
+            Changes:   
+    ----------
+        State: - file
+        Name:      /opt/src
+        Function:  recurse
+            Result:    True
+            Comment:   The directory /opt/src is in the correct state
+            Changes:   
+    ----------
+        State: - file
+        Name:      /etc/supervisor/conf.d/node-web-skel.conf
+        Function:  managed
+            Result:    True
+            Comment:   File /etc/supervisor/conf.d/node-web-skel.conf is in the correct state
+            Changes:   
+    ----------
+        State: - pkg
+        Name:      git
+        Function:  installed
+            Result:    True
+            Comment:   Package git is already installed
+            Changes:   
+    ----------
         State: - npm
         Name:      coffee-script
         Function:  installed
@@ -240,7 +275,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
     Summary
     ------------
-    Succeeded: 4
+    Succeeded: 9
     Failed:    0
     ------------
-    Total:     4
+    Total:     9
