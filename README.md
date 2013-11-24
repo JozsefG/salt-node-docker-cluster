@@ -46,7 +46,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
 #### Cmds
 
-    $ sudo salt 'minion-*' state.highstate
+    $ sudo salt 'minion-01' state.highstate
     
 #### Output
     minion-01:
@@ -65,38 +65,6 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     ------------
     Total:     5
     
-    minion-03:
-    ----------
-        State: - docker
-        Name:      nodebuntu
-        Function:  built
-            Result:    True
-            Comment:   Image already built: nodebuntu, id: 27ca229ad947061aeda63f2f25622f3af9dd63c2d0e70ac43e6c73a61e2d8cac
-            Changes:   
-    
-    Summary
-    ------------
-    Succeeded: 5
-    Failed:    0
-    ------------
-    Total:     5
-    
-    minion-02:
-    ----------
-        State: - docker
-        Name:      nodebuntu
-        Function:  built
-            Result:    True
-            Comment:   Image already built: nodebuntu, id: 27ca229ad947061aeda63f2f25622f3af9dd63c2d0e70ac43e6c73a61e2d8cac
-            Changes:   
-    
-    Summary
-    ------------
-    Succeeded: 5
-    Failed:    0
-    ------------
-    Total:     5
-
     
 ## Spawning minions to do your bidding
 
@@ -115,7 +83,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 
 ##### Cmds
 
-    $ vagrant ssh minion01
+    $ vagrant ssh minion-01
     $ sudo docker run -d -name node -h node -m 279969792 -v /vagrant:/vagrant -p 3000 nodebuntu
     $ exit
     
@@ -136,7 +104,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 ##### Cmds
     
     $ vagrant ssh salt
-    $ sudo salt 'minion-*' docker.get_containers all=false
+    $ sudo salt 'minion-01' docker.get_containers all=false
 
  
 ##### Output:
@@ -176,26 +144,6 @@ Vagrant + Salt + Node + Docker = Cluster yes.
                 Up 3 hours
         status:
             True
-    minion-02:
-        ----------
-        comment:
-            We did not get any expectable answer from docker
-        id:
-            None
-        out:
-            None
-        status:
-            False
-    minion-03:
-        ----------
-        comment:
-            We did not get any expectable answer from docker
-        id:
-            None
-        out:
-            None
-        status:
-            False 
     
 ## Make demands to our node container minion
 
@@ -223,7 +171,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 
     $  sudo salt 'node' state.highstate
     
-
+##### Output
     node:
     ----------
         State: - pkg
@@ -297,8 +245,12 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     Total:     9
     
     
+##### Cmds    
+
     $ sudo salt 'minion-01' docker.restart f99a4e4730d6ef9d00f5369aa11af386b8fc7d538faea196953815684ca1a551
     
+##### Output
+
     minion-01:
         ----------
         comment:
@@ -311,8 +263,12 @@ Vagrant + Salt + Node + Docker = Cluster yes.
             True
             
     
+##### Cmds
+
     $ sudo salt 'minion-01' cmd.run 'sudo docker logs node'
     
+    
+##### Output
     2013-11-24 22:43:28,555 INFO waiting for salt-minion to die
     2013-11-24 22:43:28,579 INFO stopped: salt-minion (exit status 0)
     2013-11-24 22:43:28,933 CRIT Supervisor running as root (no user in config file)
