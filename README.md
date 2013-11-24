@@ -109,10 +109,13 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
     Note:  In order for memory allocation to actually happen, there must
     be swap space allocated on the minion server.  
+    
+    Also Note:  This should really by run on salt-master with the docker
+    module.  Right now this is the only time we will go on a minion itself.
 
 ##### Cmds
 
-    $ vagrant ssh minion-[01, 02, 03]
+    $ vagrant ssh minion01
     $ sudo docker run -d -name node -h node -m 279969792 -v /vagrant:/vagrant -p 3000 nodebuntu
     $ exit
     
@@ -212,7 +215,9 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     We are essentially telling salt-master to inject the node minion
     running in a docker container on minion-01 with a nodejs httpd 
     based webapp that runs on port 3000.  Once the highstate is complete,
-    the container must be restarted for supervisord to pick up the new config
+    the container must be restarted for supervisord to pick up the new config.
+    
+    Finally, we can verify the restart succeeded by viewing the container's logs.
 
 ##### Cmds
 
@@ -304,3 +309,22 @@ Vagrant + Salt + Node + Docker = Cluster yes.
             None
         status:
             True
+            
+    
+    $ sudo salt 'minion-01' cmd.run 'sudo docker logs node'
+    
+    2013-11-24 22:43:28,555 INFO waiting for salt-minion to die
+    2013-11-24 22:43:28,579 INFO stopped: salt-minion (exit status 0)
+    2013-11-24 22:43:28,933 CRIT Supervisor running as root (no user in config file)
+    2013-11-24 22:43:28,933 WARN Included extra file "/etc/supervisor/conf.d/node-web-skel.conf" during parsing
+    2013-11-24 22:43:28,934 WARN Included extra file "/etc/supervisor/conf.d/supervisor-salt.conf" during parsing
+    2013-11-24 22:43:28,953 INFO RPC interface 'supervisor' initialized
+    2013-11-24 22:43:28,953 WARN cElementTree not installed, using slower XML parser for XML-RPC
+    2013-11-24 22:43:28,953 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+    2013-11-24 22:43:28,953 INFO supervisord started with pid 1
+    2013-11-24 22:43:29,957 INFO spawned: 'salt-minion' with pid 7
+    2013-11-24 22:43:29,958 INFO spawned: 'node-web-skel' with pid 8
+    2013-11-24 22:43:31,222 INFO success: salt-minion entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+    2013-11-24 22:43:31,223 INFO success: node-web-skel entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+
+
