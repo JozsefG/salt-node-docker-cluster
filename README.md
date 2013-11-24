@@ -134,6 +134,7 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     
     $ vagrant ssh salt
     $ sudo salt 'minion-*' docker.get_containers all=false
+
  
 ##### Output:
     minion-01:
@@ -198,10 +199,20 @@ Vagrant + Salt + Node + Docker = Cluster yes.
 #### Description
 
     For a quick example of states, we'll double check nodejs (and deps)
-    installed into the container during our docker image build.
+    installed into the container during our docker image build, and run
+    a node httpd app on port 3000.
     
     This project includes a srv folder that is copied to /srv on the master.
     Please see these files for config details.
+    
+    Also note, /srv/salt/node/src is synced by salt master 
+    for this demonstration, so create the src folder and 
+    put an app.js that runs on port 3000 or takes PORT from env.
+    
+    We are essentially telling salt-master to inject the node minion
+    running in a docker container on minion-01 with a nodejs httpd 
+    based webapp that runs on port 3000.  Once the highstate is complete,
+    the container must be restarted for supervisord to pick up the new config
 
 ##### Cmds
 
