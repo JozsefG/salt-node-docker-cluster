@@ -290,3 +290,17 @@ Vagrant + Salt + Node + Docker = Cluster yes.
     Failed:    0
     ------------
     Total:     9
+    
+    
+    $ sudo salt 'minion-01' docker.restart f99a4e4730d6ef9d00f5369aa11af386b8fc7d538faea196953815684ca1a551
+    
+    minion-01:
+        ----------
+        comment:
+            Container f99a4e4730d6ef9d00f5369aa11af386b8fc7d538faea196953815684ca1a551 was restarted
+        id:
+            f99a4e4730d6ef9d00f5369aa11af386b8fc7d538faea196953815684ca1a551
+        out:
+            None
+        status:
+            True
