@@ -32,6 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.provision :shell, :inline=> "sudo docker pull ubuntu:latest"
     config.vm.provision :shell, :inline=> "sudo mkdir /etc/docker; sudo mkdir /etc/docker/nodebuntu"
+    config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/docker/nodebuntu/minion"
     config.vm.provision :shell, :inline=> "sudo cp /vagrant/install-node.sh /tmp/install-node.sh"
     config.vm.provision :shell, :inline=> "sudo chmod 755 /tmp/install-node.sh"
     config.vm.provision :shell, :inline=> "sudo /tmp/install-node.sh"
@@ -65,19 +66,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision :shell, :inline=> "sudo apt-get update"
       config.vm.provision :shell, :inline=> "sudo apt-get -y install salt-minion lxc-docker git python-pip"
 
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/install-node.sh /tmp/install-node.sh"
+      config.vm.provision :shell, :inline=> "sudo mkdir /etc/docker; sudo mkdir /etc/docker/nodebuntu"
+      config.vm.provision :shell, :inline=> "sudo chmod 755 /tmp/install-node.sh"
+      config.vm.provision :shell, :inline=> "sudo /tmp/install-node.sh"
       config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/salt/minion"
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/docker/nodebuntu/minion"
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion-dockerfile /etc/docker/nodebuntu/Dockerfile"
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/supervisor-salt.conf /etc/docker/nodebuntu"
 
       config.vm.provision :shell, :inline=> "git clone https://github.com/dotcloud/docker-py.git"
       config.vm.provision :shell, :inline=> "cd docker-py; sudo python setup.py install"
 
       config.vm.provision :shell, :inline=> "sudo docker pull ubuntu:latest"
-      config.vm.provision :shell, :inline=> "sudo mkdir /etc/docker; sudo mkdir /etc/docker/nodebuntu"
-      config.vm.provision :shell, :inline=> "sudo cp /vagrant/install-node.sh /tmp/install-node.sh"
-      config.vm.provision :shell, :inline=> "sudo chmod 755 /tmp/install-node.sh"
-      config.vm.provision :shell, :inline=> "sudo /tmp/install-node.sh"
-      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion-dockerfile /etc/docker/nodebuntu/Dockerfile"
-      config.vm.provision :shell, :inline=> "sudo cp /vagrant/supervisor-salt.conf /etc/docker/nodebuntu"
-      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/salt/minion"
 
       config.vm.provision :shell, :inline=> "sudo docker build -t nodebuntu /etc/docker/nodebuntu/"
 
