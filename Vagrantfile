@@ -77,6 +77,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision :shell, :inline=> "sudo /tmp/install-node.sh"
       config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion-dockerfile /etc/docker/nodebuntu/Dockerfile"
       config.vm.provision :shell, :inline=> "sudo cp /vagrant/supervisor-salt.conf /etc/docker/nodebuntu"
+      config.vm.provision :shell, :inline=> "sudo cp /vagrant/minion /etc/salt/minion"
 
       config.vm.provision :shell, :inline=> "sudo docker build -t nodebuntu /etc/docker/nodebuntu/"
 
