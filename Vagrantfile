@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell, :inline=> "sudo apt-get update"
     config.vm.provision :shell, :inline=> "sudo apt-get -y install salt-master lxc-docker git python-pip"
    
-    config.vm.provision :shell, :inline=> "sudo cp -R /vagrant/srv /srv"
+    config.vm.provision :shell, :inline=> "sudo cp -R /vagrant/srv/* /srv"
 
     config.vm.provision :shell, :inline=> "git clone https://github.com/dotcloud/docker-py.git"
     config.vm.provision :shell, :inline=> "cd docker-py; sudo python setup.py install" 
